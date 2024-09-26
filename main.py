@@ -90,7 +90,7 @@ class Food:
 def heuristic(a, b, snake_body, walls1, walls2):
     h = abs(a[0] - b[0]) + abs(a[1] - b[1])
 
-    # Penalize squares near the wall
+    # DONT TOUCH WALLS
     wall_proximity_penalty = 10
     if (
         a[0] < wall_proximity_penalty
@@ -100,7 +100,7 @@ def heuristic(a, b, snake_body, walls1, walls2):
     ):
         h += wall_proximity_penalty
 
-    # Penalize squares near the snake's body, excluding immediate neighbors
+    # DONT TOUCH BODY
     snake_proximity_penalty = 1
     for segment in snake_body[1:]:
         if abs(a[0] - segment[0]) + abs(a[1] - segment[1]) < snake_proximity_penalty:
@@ -204,31 +204,31 @@ food = Food()
 
 # Main game loop
 clock = pygame.time.Clock()
-frame_count = 0  # Initialize frame count
+frame_count = 0 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
 
-    # Call your AI logic to determine the next direction for the snake
+
     if frame_count % SNAKE_SPEED == 0:
         find_path(snake, food)
         find_path(snake, food)
         snake.move()
 
-    # Check for collision with food
+
     if snake.body[0] == food.position:
         snake.grow = True
         SCORE += 1
         food.respawn(snake.body)
 
-    # Check for collision with walls or itself
+
     if snake.check_collision():
         pygame.quit()
         sys.exit()
 
-    # Clear the screen
+
     screen.fill(BLACK)
 
     # Draw the snake and food
@@ -239,7 +239,7 @@ while True:
     pygame.display.flip()
 
     # Control the game speed
-    clock.tick(60)  # 60 frames per second
+    clock.tick(30)  # change frames per second
     frame_count += 1
 #    print("Game loop running")
     print("Score:", SCORE)
